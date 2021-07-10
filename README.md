@@ -23,9 +23,12 @@ outcome:
 ```
 [v3_3prime quant] processed 317,964,164 reads, 164 reads pseudoaligned
 [5prime quant] processed 215,257,851 reads, 366 reads pseudoaligned
+[allo_38low] processed 6,006,377 reads, 10 reads pseudoaligned
+[allo_34high] processed 20,581,694 reads, 1,558 reads pseudoaligned
 ```
 
 v3: 0.5 reads / million
 5p: 1.7 reads / million
+
 
 <br><br>
