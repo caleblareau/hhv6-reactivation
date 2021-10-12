@@ -45,8 +45,12 @@ process_tiles <- function(donor){
   p10 <- FeaturePlot(so_filt, features = c( "CD4"),sort.cell = TRUE)
   p11 <- FeaturePlot(so_filt, features = c( "MKI67"),sort.cell = TRUE)
   p12 <- FeaturePlot(so_filt, features = c( "NCAM1"),sort.cell = TRUE)
-  cowplot::ggsave2(cowplot::plot_grid(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, nrow = 3), 
-                   width = 15, height = 9, filename = paste0("../plots/Sample", donor, ".png"))
+  p13 <- FeaturePlot(so_filt, features = c( "TRDC"), sort.cell = TRUE)
+  p14 <- FeaturePlot(so_filt, features = c( "TRGC2"),sort.cell = TRUE)
+  p15 <- FeaturePlot(so_filt, features = c( "LTA"),sort.cell = TRUE)
+  p16 <- FeaturePlot(so_filt, features = c( "LTB"),sort.cell = TRUE)
+  cowplot::ggsave2(cowplot::plot_grid(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, nrow = 4), 
+                   width = 15, height = 12, filename = paste0("../plots/Sample", donor, ".png"))
   
 }
 process_tiles("34")
