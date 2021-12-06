@@ -1,17 +1,16 @@
 library(data.table)
 library(dplyr)
 
-gene_vec <- fread("../data/reference/HHV6b_only.index.txt", header = FALSE)[[2]]
-lapply(c("34", "38", "97", "98"), function(ss){
-  fread(paste0("../data/feature_counts/ALLO_Sample",ss,"_HHV6b.kb.txt.gz")) %>% 
+combine_hhv6_clones <- function(ss){
+  fread(paste0("../data/feature_counts/ALLO_",ss,"_HHV6b.kb.txt.gz")) %>% 
     mutate(idx = V3 +1) %>% 
-    filter(idx <= 103) %>% unique() -> udf
-  udf$gene <-gene_vec[as.numeric(as.character(udf$idx))]
-  udf$barcode <- udf$V1
-  udf %>%
-    group_by(barcode, gene) %>% summarize(count = n()) %>% 
-    reshape2::dcast(barcode ~ gene, fill = 0, value.var = "count") -> count_df
-  write.table(count_df, file = paste0("../countdf/HHV6b_counts_ALLO", ss, ".tsv"), 
-              sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
-})
+    filter(idx <= 103) %>% unique() %>% group_by(V1) %>% summarize(count = n()) -> udf
+  vec <- udf$count; names(vec) <- paste0(udf$V1, "-1")
+  tcrdf <- fread(paste0("../data/tcrs/all/ALLO-TCRs_",ss,"_VDJ_all_contig_annotations.csv.gz"))
+  tcrdf$count <- vec[as.character(tcrdf$barcode)]
+  tcrdf %>% arrange(desc(count))
+}
 
+s34 <- combine_hhv6_clones("Sample34")
+write.table(s34, file = paste0("../output/",ss, "_tcr_hhv6.tsv"),
+            sep = '\t', quote = FALSE, row.names = FALSE, col.names = TRUE)
