@@ -53,6 +53,10 @@ process_tiles <- function(donor){
                    width = 15, height = 12, filename = paste0("../plots/Sample", donor, ".png"))
   
 }
+
+process_tiles("34-Day7")
+process_tiles("61-Day7")
+
 process_tiles("34")
 process_tiles("38")
 process_tiles("97")
