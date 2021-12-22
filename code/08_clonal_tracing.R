@@ -3,6 +3,7 @@ library(dplyr)
 
 combine_hhv6_clones <- function(ss){
   fread(paste0("../data/feature_counts/ALLO_",ss,"_HHV6b.kb.txt.gz")) %>% 
+    filter(V3!= 120) %>% 
     mutate(idx = V3 +1) %>% 
     filter(idx <= 103) %>% unique() %>% group_by(V1) %>% summarize(count = n()) -> udf
   vec <- udf$count; names(vec) <- paste0(udf$V1, "-1")
@@ -11,6 +12,6 @@ combine_hhv6_clones <- function(ss){
   tcrdf %>% arrange(desc(count))
 }
 
-s34 <- combine_hhv6_clones("Sample34")
-write.table(s34, file = paste0("../output/",ss, "_tcr_hhv6.tsv"),
-            sep = '\t', quote = FALSE, row.names = FALSE, col.names = TRUE)
+s34 <- combine_hhv6_clones("Sample34-Day7")
+s34 %>% filter(chain == "TRA") %>% 
+  arrange(desc(umis))

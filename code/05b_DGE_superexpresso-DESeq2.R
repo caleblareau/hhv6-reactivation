@@ -64,7 +64,7 @@ dds <- DESeq(dds)
 res <- results(dds)
 data.frame(res) %>% arrange((padj))
 
-cpm[c("PHLDA2","HSPD1", "LTA","NPM3","CD4", "CD8A", "CD52", "CCL4", "GNLY"),]
+cpm[c("CD3D","CD3E", "TRAC","NPM3","CD4", "CD8A", "CD52", "CCL4", "GNLY"),]
 
 
 library(EnhancedVolcano)
