@@ -1,7 +1,7 @@
 library(data.table)
 library(dplyr)
 library(pheatmap)
-
+library(BuenColors)
 # Import data
 gene_vec <- fread("../data/reference/HHV6b_only.index.txt", header = FALSE)[[2]]
 fread(paste0("../data/feature_counts/ALLO_D5720-Day15_HHV6b.kb.txt.gz")) %>% 

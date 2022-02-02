@@ -46,6 +46,8 @@ so_filt <- so_filt %>%
   ScaleData(vars.to.regress = c("nFeature_RNA", "percent.mt")) %>% RunPCA() %>%
   FindNeighbors() %>% FindClusters(resolution = 0.5) %>% RunUMAP(dims = 1:30)
 
+pbmc_infection_mat <- hhv6_pct_mat
+
 cor_mat <- cor(t(data.matrix(so_filt@assays$RNA@data)), hhv6_pct_mat)
 df <- data.frame(
   cor = round(cor_mat, 3),
@@ -62,8 +64,7 @@ df <- df %>%
 
 library(ggrepel)
 ggplot(df, aes(x = cor.late, y = cor.early, label = label_rep)) +
-  geom_point(aes( color = label_rep != "")) + 
-  geom_text_repel(max.overlaps = Inf, min.segment.length = 0, seed = 42, box.padding = 0.5) + 
+  geom_point() + 
   scale_color_manual(values = c("black", "red")) + 
   scale_x_continuous(limits = c(-0.25, 0.5)) +
   scale_y_continuous(limits = c(-0.5, 0.3)) +
