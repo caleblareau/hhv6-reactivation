@@ -1,4 +1,4 @@
-# Allogene collaboration
+# HHV6 Reactivation
 CL notes for Allogene collaboration
 
 ### Get the reference genome
