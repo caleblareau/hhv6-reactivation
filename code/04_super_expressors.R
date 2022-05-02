@@ -39,7 +39,7 @@ make_superexpressor_plot <- function(donor){
   )
   
   # Count super expressors too
-  n_SE <- sum(so_filt@meta.data$HHV6 >= 5)
+  n_SE <- sum(so_filt@meta.data$HHV6 >= 10)
   n_cells <- dim(so_filt)[2]
   title = paste0(donor, " n_super=", as.character(n_SE), "; n=", as.character(n_cells), "; HHV6max=", as.character(max(so_filt@meta.data$HHV6)))
   viral_abundance_df %>% reshape2::melt(id.vars = "rank") %>%
@@ -48,7 +48,7 @@ make_superexpressor_plot <- function(donor){
     scale_color_manual(values = c("grey", "firebrick")) + L_border() +
     labs(x = "Rank ordered cells", color = "Data", y = "# of HHV6 UMIs (log scaled counts)") +
     geom_hline(yintercept = 0, linetype = 2)+ scale_y_log10() + 
-    geom_hline(yintercept = 4, linetype = 2, color = "darkblue") + ggtitle(title) -> plot1
+    geom_hline(yintercept = 10, linetype = 2, color = "darkblue") + ggtitle(title) -> plot1
   cowplot::ggsave2(plot1, file = paste0("../plots/nofilter_SuperExpressor_", donor, ".png"), 
                    width = 5, height = 4)
   donor
