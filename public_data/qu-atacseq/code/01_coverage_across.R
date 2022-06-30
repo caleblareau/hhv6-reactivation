@@ -14,8 +14,8 @@ dd <- data.frame(
 ) %>% makeGRangesFromDataFrame()
 cov <- as.integer(coverage(dd)[["chr1"]])
 ddf <- data.frame(
-  index = roll_mean(1:length(cov), n = 1),
-  coverage = roll_mean(cov, n = 1)
+  index = roll_mean(1:length(cov), n =501),
+  coverage = roll_mean(cov, n = 501)
 )
 
 library(BuenColors)
@@ -26,4 +26,4 @@ p1 <- ggplot(ddf[seq(1, 162075, 20),], aes(x = index, y = coverage+1)) +
   labs (y = "total coverage", x = "Position in HHVb reference genome") 
 p1
 
-cowplot::ggsave2(p1, file = "../plots/coverage_across_virus-quATAC-nosmooth.pdf", height = 1.5, width = 2.3)
+cowplot::ggsave2(p1, file = "../plots/coverage_across_virus-quATAC-500smooth.pdf", height = 1.5, width = 2.3)
