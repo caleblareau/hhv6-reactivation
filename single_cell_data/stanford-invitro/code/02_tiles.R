@@ -1,3 +1,4 @@
+library(ggplot2)
 library(data.table)
 library(dplyr)
 library(Seurat)
@@ -32,28 +33,34 @@ process_tiles <- function(donor){
     FindVariableFeatures() %>% NormalizeData() %>%
     ScaleData(vars.to.regress = c("nFeature_RNA", "percent.mt")) %>% RunPCA() %>%
     FindNeighbors() %>% FindClusters(resolution = 0.5) %>% RunUMAP(dims = 1:20)
-  p1 <- DimPlot(so_filt, reduction = "umap", label = TRUE) + NoLegend()
-  p2 <- FeaturePlot(so_filt, features = c( "WPRE"),sort.cell = TRUE, max.cutoff = "q99")
-  p3 <- FeaturePlot(so_filt, features = c( "HHV6"), sort.cell = TRUE, max.cutoff = "q99")
-  p4 <- FeaturePlot(so_filt, features = c( "nFeature_RNA"), sort.cell = TRUE)
-  p5 <- FeaturePlot(so_filt, features = c( "percent.mt"), sort.cell = TRUE)
-  p6 <- FeaturePlot(so_filt, features = c( "percent.ribo"), sort.cell = TRUE)
   
-  p7 <- FeaturePlot(so_filt, features = c( "CD3E"),sort.cell = TRUE)
-  p8 <- FeaturePlot(so_filt, features = c( "PDCD1"),sort.cell = TRUE)
-  p9 <- FeaturePlot(so_filt, features = c( "CD8A"), sort.cell = TRUE)
-  p10 <- FeaturePlot(so_filt, features = c( "CD4"),sort.cell = TRUE)
-  p11 <- FeaturePlot(so_filt, features = c( "MKI67"),sort.cell = TRUE)
-  p12 <- FeaturePlot(so_filt, features = c( "NCAM1"),sort.cell = TRUE)
-  p13 <- FeaturePlot(so_filt, features = c( "TRDC"), sort.cell = TRUE)
-  p14 <- FeaturePlot(so_filt, features = c( "TRGC2"),sort.cell = TRUE)
-  p15 <- FeaturePlot(so_filt, features = c( "LTA"),sort.cell = TRUE)
-  p16 <- FeaturePlot(so_filt, features = c( "LTB"),sort.cell = TRUE)
+  ####
+  p1 <- DimPlot(so_filt, reduction = "umap", label = TRUE) + NoLegend()
+  p2 <- FeaturePlot(so_filt, features = c( "WPRE"),sort.cell = TRUE, max.cutoff = "q99")+ theme_void()
+  p3 <- FeaturePlot(so_filt, features = c( "HHV6"), sort.cell = TRUE, max.cutoff = "q99")+ theme_void()
+  p4 <- FeaturePlot(so_filt, features = c( "nFeature_RNA"), sort.cell = TRUE)+ theme_void()
+  p5 <- FeaturePlot(so_filt, features = c( "percent.mt"), sort.cell = TRUE)+ theme_void()
+  p6 <- FeaturePlot(so_filt, features = c( "percent.ribo"), sort.cell = TRUE)+ theme_void()
+  
+  p7 <- FeaturePlot(so_filt, features = c( "CD3E"),sort.cell = TRUE)+ theme_void()
+  p8 <- FeaturePlot(so_filt, features = c( "TNFRSF4"),sort.cell = TRUE)+ theme_void()
+  p9 <- FeaturePlot(so_filt, features = c( "CD8A"), sort.cell = TRUE)+ theme_void()
+  p10 <- FeaturePlot(so_filt, features = c( "CD4"),sort.cell = TRUE)+ theme_void()
+  p11 <- FeaturePlot(so_filt, features = c( "MKI67"),sort.cell = TRUE)+ theme_void()
+  p12 <- FeaturePlot(so_filt, features = c( "LEF1"),sort.cell = TRUE)+ theme_void()
+  p13 <- FeaturePlot(so_filt, features = c( "CCR7"), sort.cell = TRUE)+ theme_void()
+  p14 <- FeaturePlot(so_filt, features = c( "S100A4"),sort.cell = TRUE)+ theme_void()
+  p15 <- FeaturePlot(so_filt, features = c( "LTA"),sort.cell = TRUE)+ theme_void()
+  p16 <- FeaturePlot(so_filt, features = c( "LTB"),sort.cell = TRUE) + theme_void()
+  
   cowplot::ggsave2(cowplot::plot_grid(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, nrow = 4), 
                    width = 15, height = 12, filename = paste0("../plots/Sample", donor, ".png"))
   
+  cowplot::ggsave2(cowplot::plot_grid(p9, p10, p3, p11, nrow = 1), 
+                   width = 12, height = 2.5, filename = paste0("../plots/simpleSample", donor, ".png"), dpi = 400)
 }
 
+process_tiles("34-Day5")
 process_tiles("34-Day7")
 process_tiles("61-Day7")
 

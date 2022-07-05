@@ -21,7 +21,7 @@ fread("../data/percell_qPCR.txt") %>%
   scale_fill_manual(values = jdb_palette("corona")[4:1]) +
   pretty_plot(fontsize = 7) + L_border()  +
   scale_y_continuous(expand = c(0,0)) + theme(legend.position = "none") -> pbar
-cowplot::ggsave2(pbar, file = "../plots/percell.pdf", width = 1.8, height = 1.2)
+cowplot::ggsave2(pbar, file = "../plots/percell.pdf", width = 2, height = 1.2)
 
 
 fread("../data/extended_culture.txt") %>%
@@ -29,4 +29,5 @@ fread("../data/extended_culture.txt") %>%
   geom_point() + geom_line()  +
   scale_y_log10() +
   scale_color_manual(values = jdb_palette("corona")[c(2,10)]) +
-  pretty_plot(fontsize = 7) + L_border()  + labs(x = "Days in Culture", y = "HHV-6B U31 qPCR")
+  pretty_plot(fontsize = 7) + L_border()  + labs(x = "Days in Culture", y = "HHV-6B U31 qPCR")-> plong2
+cowplot::ggsave2(plong2, file = "../plots/later_timecourse.pdf", width = 2.5, height = 1.5)
