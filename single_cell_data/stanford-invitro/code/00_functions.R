@@ -13,7 +13,7 @@ import_from_kite <- function(kite_df, barcodes, logme= TRUE){
 
 
 import_from_kite_matrix <- function(kite_df, barcodes){
-  gene_idx <- fread("../data/reference/HHV6b_only.index.txt", header = FALSE)
+  gene_idx <- fread("../../../hhv6-reference/HHV6b_only.index.txt", header = FALSE)
   vec <- gene_idx[["V2"]]
   ncount <- kite_df %>% filter(V3 != "120") %>% group_by(V1,V3) %>%
     summarize(count = n()) %>% mutate(gene = vec[as.numeric(V3) + 1]) %>%

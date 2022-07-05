@@ -52,6 +52,8 @@ process_channel(channel = "F1") # 1 cell
 ) %>% filter(n_hhv6 > 0) -> df
 
 filt_df <- df %>% filter(!is.na(patient)) %>% arrange(desc(n_hhv6))
+write.table(filt_df, file = "../output/HHV6-positive-cells.tsv", 
+            sep = "\t", quote = FALSE, row.names = TRUE, col.names = TRUE)
 
 fix <- function(vec){
   return(ifelse(is.na(vec), 0, vec))
