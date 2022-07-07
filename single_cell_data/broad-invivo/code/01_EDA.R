@@ -18,6 +18,7 @@ process_channel <- function(channel){
     mutate(bc = paste0(V1, "-1"))
   print(dim(hhv6))
   hhv6p_cells <- unique(hhv6$bc)
+  print(length(hhv6p_cells))
   hhv6p_count <- table(hhv6[["bc"]])
   
   # Import Gex data
