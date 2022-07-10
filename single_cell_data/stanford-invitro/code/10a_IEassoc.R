@@ -84,8 +84,8 @@ p1 <- rbind(s34d7, s34d5, s61d7)[,-2] %>%
   reshape2::melt(id.vars = "sampleID") %>%
   ggplot(aes(x = variable, y = value, fill = sampleID)) + 
   geom_bar(stat = "identity", position='dodge', color = "black") +
-  pretty_plot(fontsize = 8) + L_border() +
+  pretty_plot(fontsize = 8) + L_border() + scale_fill_manual(values = jdb_palette("corona")) +
   labs(x = "Gene program", y = "Pearson correlation", fill = "")
-cowplot::ggsave2(p1, file = "../plots/bar_ox40correlation.pdf", width = 2.4, height = 2)
+cowplot::ggsave2(p1, file = "../plots/bar_ox40correlation.pdf", width = 3.6, height = 2)
 
 rbind(s34d7, s34d5, s61d7)

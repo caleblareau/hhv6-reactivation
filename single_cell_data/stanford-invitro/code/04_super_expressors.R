@@ -32,6 +32,7 @@ make_superexpressor_plot <- function(donor){
   total_HHV6 <- sum(so_filt@meta.data$HHV6)
   total_RNAs <- sum(so_filt@meta.data$nCount_RNA)
   
+  # Make a null model to sample integer counts
   viral_abundance_df <- data.frame(
     null = sort(total_HHV6 * (so_filt@meta.data$nCount_RNA / total_RNAs), decreasing = TRUE),
     observed = sort(so_filt@meta.data$HHV6, decreasing = TRUE),
@@ -42,17 +43,25 @@ make_superexpressor_plot <- function(donor){
   n_SE <- sum(so_filt@meta.data$HHV6 >= 10)
   n_cells <- dim(so_filt)[2]
   title = paste0(donor, " n_super=", as.character(n_SE), "; n=", as.character(n_cells), "; HHV6max=", as.character(max(so_filt@meta.data$HHV6)))
+  
   viral_abundance_df %>% reshape2::melt(id.vars = "rank") %>%
     ggplot(aes(x = rank, y = value , color = variable)) + 
     geom_point(size = 0.5) + pretty_plot() + 
     scale_color_manual(values = c("grey", "firebrick")) + L_border() +
-    labs(x = "Rank ordered cells", color = "Data", y = "# of HHV6 UMIs (log scaled counts)") +
-    geom_hline(yintercept = 0, linetype = 2)+ scale_y_log10() + 
-    geom_hline(yintercept = 10, linetype = 2, color = "darkblue") + ggtitle(title) -> plot1
+    labs(x = "Rank ordered cells", color = "Data", y = "") +
+    geom_hline(yintercept = 0, linetype = 2)+ scale_y_log10() + theme(legend.position = "none") + 
+    geom_hline(yintercept = 10, linetype = 2, color = "darkblue") + ggtitle(title) +
+    theme(axis.title.y=element_blank(),
+          axis.text.y=element_blank() )+
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank())-> plot1
+  plot1
   cowplot::ggsave2(plot1, file = paste0("../plots/nofilter_SuperExpressor_", donor, ".png"), 
-                   width = 5, height = 4)
+                   width = 3, height = 3, dpi = 500)
   donor
 }
 
-lapply(c("Sample61-Day7", "Sample34-Day5", "Sample34-Day7", "GMP6-Day6", "D5720-Day15"), make_superexpressor_plot)
+#lapply(c("Sample61-Day7", "Sample34-Day5", "Sample34-Day7", "GMP6-Day6", "D5720-Day15"), make_superexpressor_plot)
 lapply(c("Sample34", "Sample38", "Sample97", "Sample98"), make_superexpressor_plot)
+

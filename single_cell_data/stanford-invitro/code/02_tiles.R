@@ -56,8 +56,8 @@ process_tiles <- function(donor){
   cowplot::ggsave2(cowplot::plot_grid(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, nrow = 4), 
                    width = 15, height = 12, filename = paste0("../plots/Sample", donor, ".png"))
   
-  cowplot::ggsave2(cowplot::plot_grid(p9, p10, p3, p11, nrow = 1), 
-                   width = 12, height = 2.5, filename = paste0("../plots/simpleSample", donor, ".png"), dpi = 400)
+  cowplot::ggsave2(cowplot::plot_grid(p9, p10, p3, p11, p2, nrow = 1), 
+                   width = 15, height = 2.5, filename = paste0("../plots/simpleSample", donor, ".png"), dpi = 400)
 }
 
 process_tiles("34-Day5")

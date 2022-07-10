@@ -2,8 +2,7 @@ library(data.table)
 library(dplyr)
 library(Seurat)
 
-md <- fread("../data/cell-annotation-metadata.txt", header = FALSE)
-
+md <- fread("../data/fromNick/cell-annotation-metadata.txt", header = FALSE)
 
 process_channel <- function(channel){
   # Subset meta data for specific channel

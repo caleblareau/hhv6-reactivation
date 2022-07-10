@@ -4,30 +4,21 @@ library(BuenColors)
 library(Seurat)
 library(ComplexHeatmap)
 
-# Helper function to annotate genes
-import_from_kite_matrix <- function(kite_df){
-  gene_idx <- fread("../../../hhv6-reference/HHV6b_only.index.txt", header = FALSE)
+gene_idx <- fread("../../../hhv6-reference/HHV6b_only.index.txt", header = FALSE)
+
+pp <- function(donor){
+  kite_df <- fread(paste0("../data/feature_counts/ALLO_",donor,"_HHV6b.kb.txt.gz"))
   vec <- gene_idx[["V2"]]
-  ncount <- kite_df %>% filter(V3 != "120") %>% group_by(V1,V3) %>%
-    summarize(count = n()) %>% mutate(gene = vec[as.numeric(V3) + 1]) %>%
-    data.table
-  d <- (data.frame(dcast.data.table(ncount, V1 ~ gene, fill = 0, value.var = "count", fun.aggregate = sum)))
-  rownames(d) <- d[[1]]
-  mat <- data.matrix(d[,-c(1,2)])
-  return(mat)
-}
-
-# Import counts matrix
-import_hhv6_mat <- function(){
-  hhv6_mat <- import_from_kite_matrix(
-    unique(fread(paste0("../data/feature_counts/ALLO_Sample34-Day5_HHV6b.kb.txt.gz"))))
-  rownames(hhv6_mat) <- paste0(rownames(hhv6_mat), "-1")
-  t(hhv6_mat)
-}
-
-# Import matrix
-hhv6_mat <- import_hhv6_mat()
-
+  ncount <- kite_df %>% filter(V3 != "120" & V3 != "6") %>% group_by(V1,V3) %>%
+    summarize(count = n()) %>% mutate(gene = vec[as.numeric(V3) + 1], sample = donor) %>%
+    ungroup() %>%group_by(V1) %>% filter(sum(count) > 100)
+  ncount[,c("sample", "V1", "gene", "count")]
+  }
+rbdf <- rbind(pp("Sample34"), pp("Sample97"), pp("Sample98"))
+refmat <- rbdf[complete.cases(rbdf),] %>%
+  reshape2::dcast(sample + V1 ~ gene, fill = 0, value.var = "count")
+donor <- refmat[[1]]
+hhv6_mat <- t(data.matrix(data.frame(refmat[,c(-1, -2)])))
 
 # Set up gene annotations
 anno_df <- fread("../../../hhv6-reference/HHV6b_expression_annotations.tsv", header = FALSE)
@@ -57,16 +48,16 @@ ha <- HeatmapAnnotation(
   show_legend = FALSE, annotation_label = ""
 )
 
-
 # Now plot data
-hm <- Heatmap(t(log1p(hhv6_mat[adf_go$gene,colSums(hhv6_mat) > 10])),
+hm <- Heatmap(t(log1p(hhv6_mat[adf_go$gene,])),
               cluster_rows = TRUE, cluster_columns = FALSE,
         col = jdb_palette("solar_rojos"), top_annotation =  ha, 
         column_names_gp = grid::gpar(fontsize = 4),
         column_split  = adf_go$anno,
+        row_split = donor,
         row_names_gp = grid::gpar(fontsize = 0), show_heatmap_legend = FALSE)
 
-pdf(file="../plots/HHV6expressionHeatmap.pdf", width = 3, height = 5)  
+pdf(file="../plots/HHV6expressionHeatmap-viralgenes.pdf", width = 5, height = 2)  
 par(cex.main=0.8,mar=c(1,1,1,1))
 hm
 dev.off()
