@@ -1,0 +1,15 @@
+
+[bus] Note: Strand option was not specified; setting it to --fr-stranded for specified technology
+[index] k-mer length: 31
+[index] number of targets: 103
+[index] number of k-mers: 126,144
+[index] number of equivalence classes: 126
+[quant] will process sample 1: /research/sharedresources/immunoinformatics/jcrawfo2/JCC_Projects/JCC212_SJCAR19/DataSubmission/JCC212_DataUpload/1692399_JCC212_SJCAR19-04_Wk2_CD45neg_S4_L001_R1_001.fastq.gz
+                               /research/sharedresources/immunoinformatics/jcrawfo2/JCC_Projects/JCC212_SJCAR19/DataSubmission/JCC212_DataUpload/1692399_JCC212_SJCAR19-04_Wk2_CD45neg_S4_L001_R2_001.fastq.gz
+[quant] finding pseudoalignments for the reads ... done
+[quant] processed 389,779,810 reads, 0 reads pseudoaligned
+[~warn] no reads pseudoaligned.
+
+Read in 0 BUS records
+./shells/1692399_JCC212_SJCAR19-04_Wk2_CD45neg_S4_L001.sh: line 2: 58925 Segmentation fault      (core dumped) bustools sort -t 8 -o ./temp/1692399_JCC212_SJCAR19-04_Wk2_CD45neg_S4_L001_kb/output_sorted.bus ./temp/1692399_JCC212_SJCAR19-04_Wk2_CD45neg_S4_L001_kb/output.bus
+Read in 0 BUS records

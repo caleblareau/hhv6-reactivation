@@ -1,0 +1,13 @@
+
+[bus] Note: Strand option was not specified; setting it to --fr-stranded for specified technology
+[index] k-mer length: 31
+[index] number of targets: 103
+[index] number of k-mers: 126,144
+[index] number of equivalence classes: 126
+[quant] will process sample 1: /research/sharedresources/immunoinformatics/jcrawfo2/JCC_Projects/JCC212_SJCAR19/DataSubmission/JCC212_DataUpload/1904700_JCC212_SJCAR19-10_Wk1_PB_Gex_S3_L002_R1_001.fastq.gz
+                               /research/sharedresources/immunoinformatics/jcrawfo2/JCC_Projects/JCC212_SJCAR19/DataSubmission/JCC212_DataUpload/1904700_JCC212_SJCAR19-10_Wk1_PB_Gex_S3_L002_R2_001.fastq.gz
+[quant] finding pseudoalignments for the reads ... done
+[quant] processed 328,936,034 reads, 127 reads pseudoaligned
+
+Read in 127 BUS records
+Read in 96 BUS records
