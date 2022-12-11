@@ -42,21 +42,16 @@ process_channel <- function(channel){
   data.frame(
     n_car = as.numeric(car_seq_count),
     n_hhv6 = as.numeric(hhv6p_count[colnames(gex_filtered)]),
-    t(data.matrix(gex_filtered[c("CD3D","CD3E", "CD4", "CD8A", "CD8B","ZAP70",  "LCK", "TNF", "GZMK", "GNLY", "KLRG1", "ZEB2", "NKG7"),])), # "CCL5", "MS4A1", "TREM1"
+    t(data.matrix(gex_filtered[c("CD3D","CD3E", "CD4", "CD8A", "CD8B"),])), # "CCL5", "MS4A1", "TREM1"
     nGExpUMIs = colSums(gex_filtered), 
     pctMito = colSums(gex_filtered[grepl("^MT", rownames(gex_filtered)),])/colSums(gex_filtered)*100,
     channel = channel
   ) %>% arrange(desc(n_hhv6))
 }
 
-rbind(process_channel("BBBleuk"), # 2-3 cells
-      process_channel(channel = "BBB7"), # 2-3 cells
-      process_channel(channel = "BBB14"),
-      process_channel(channel = "BBB21")
-) %>% filter(n_hhv6 > 0) -> df
-df
+df <- process_channel(channel = "BBB7")
+filt_df <- df %>% filter(nGExpUMIs > 800) %>% arrange(desc(n_hhv6))
 
-filt_df <- df %>% filter(!is.na(patient)) %>% arrange(desc(n_hhv6))
 write.table(filt_df, file = "../output/HHV6-positive-cells-reseq.tsv", 
             sep = "\t", quote = FALSE, row.names = TRUE, col.names = TRUE)
 
