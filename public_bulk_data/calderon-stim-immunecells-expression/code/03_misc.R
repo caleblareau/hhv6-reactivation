@@ -1,17 +1,20 @@
 library(data.table)
 library(dplyr)
 library(BuenColors)
+library(annotables)
+msy_genes <- c("RPS4Y1", "ZFY", "TBL1Y", "USP9Y", "DDX3Y", "UTY", "TMSB4Y", "NLGN4Y", "KDM5D", "EIF1AY")
 
+ens <- grch38 %>% filter(chr == "Y" & symbol %in% msy_genes) %>% pull(ensgene)
+ens_vec <- grch38 %>% filter(chr == "Y" & symbol %in% msy_genes) %>% pull(symbol); names(ens_vec) <- ens
 dt <- fread("../data/GSE118165_RNA_gene_abundance.txt")
-mat <- data.matrix(data.frame(dt[,-1]))
-rownames(mat) <- dt[["V1"]]
-gene = "ENSG00000104490"
-order_df <- data.frame(sn = colnames(dt)[-1], gexp = round(mat[gene,]/colSums(mat) * 1000000, 1)) %>%
-  arrange(desc(gexp)) %>%
-  mutate(rank = 1:n())
-order_df
 
-
+dt2 <- dt %>% filter(V1 %in% ens)
+mat_big <- data.matrix(data.frame(dt[,-1]))
+mat_big_cpm <- t(t(mat_big)/colSums(mat_big)*1000000)
+mat <- mat_big_cpm[dt$V1 %in% ens,]
+rownames(mat) <- ens_vec[as.character(dt2$V1)]
+mat
+pheatmap(log1p(mat[,grepl("^X1002", colnames(mat))]))
 
 # Append meta data
 md <- fread("../data/calderon-metadata.txt")

@@ -4,10 +4,12 @@ library(Seurat)
 source("00_functions.R")
 library(ggplot2)
 library(BuenColors)
+library(viridis)
 
 # Import data
 sampleID <- "ALLO_Sample34-Day7"
 sampleID <- "ALLO_Sample61-Day7"
+sampleID <- "ALLO_Sample34-Day5"
 
 process_sample <- function(sampleID){
   h5_file = paste0("../data/gexp/",sampleID,"_rna_filtered_feature_bc_matrix.h5")
@@ -52,12 +54,16 @@ process_sample <- function(sampleID){
   so_filt$early_pct <- hhv6_pct_mat[,"early"]
   so_filt$late_pct <- hhv6_pct_mat[,"late"]
   so_filt$nHHV6 <- rowSums(hhv6_mat)
-  
+  so_filt$ox40 <- log1p(so_filt@assays$RNA@data["TNFRSF4",])
   cor(hhv6_pct_mat, rowSums(hhv6_mat), use = "pairwise.complete")
   
-  ggplot(so_filt@meta.data %>% filter(nHHV6 > 10), aes(x = nHHV6, y = immediate_early_pct, color = late_pct)) +
-    geom_point() + scale_x_log10() +
-    scale_color_gradientn(colors = jdb_palette("brewer_spectra"))
+  ggplot(so_filt@meta.data %>% filter(nHHV6 > 50), aes(x = late_pct*100, y = early_pct*100, color = immediate_early_pct)) +
+    geom_point(size = 0.5) + 
+    scale_color_viridis(limits = c(0,1)) + scale_y_continuous(limits = c(0,100)) + 
+    scale_x_continuous(limits = c(0,100)) + 
+    pretty_plot(fontsize = 8) + L_border() + labs(x = "%HHV6 UMIs - Late", y = "%HHV6 UMIs - Early") +
+    theme(legend.position = "none") -> px
+  cowplot::ggsave2(px, file = paste0("../plots/",sampleID,"scatter_hhv6signature.pdf"), width = 2, height = 2)
   
   
   # Do more seurat things
@@ -75,9 +81,14 @@ process_sample <- function(sampleID){
                    pvalue_ie = ct$p.value), (cor_mat["TNFRSF4",,drop = FALSE]))
 }
 
+s34 <- process_sample("ALLO_Sample34")
+s98 <- process_sample("ALLO_Sample98")
+
 s34d7 <- process_sample("ALLO_Sample34-Day7")
 s34d5 <- process_sample("ALLO_Sample34-Day5")
 s61d7 <- process_sample("ALLO_Sample61-Day7")
+
+
 rbind(s34d7, s34d5, s61d7)
 
 p1 <- rbind(s34d7, s34d5, s61d7)[,-2] %>%

@@ -2,28 +2,33 @@ library(data.table)
 library(dplyr)
 library(matrixStats)
 
-process_lib <- function(lib){
-  dt <- fread(lib) %>%
-    filter(TOTAL >= 1) 
-  mat <- data.matrix(data.frame(dt[,c("A", "C", "G", "T")]))
-  dt$max_allele <-c("A", "C", "G", "T")[max.col(mat)]
-  dt$AF <- round(100*(rowMaxs(mat)/ dt$TOTAL),0)
-  dt %>% mutate(mutation = max_allele != REF) %>%
-    filter(BP > 8788 & BP < 153321)
-  
+
+###
+
+all_possible_muts <- function(lib){
+  dt <- fread(lib) 
+  mat <- (data.frame(dt[,c("A", "C", "G", "T", "TOTAL", "BP", "REF")]))
+  reshape2::melt(mat, id.vars = c("BP", "TOTAL", "REF")) %>%
+    mutate(var = paste0(REF, BP, variable), af = value/ TOTAL)
 }
-d19 <- process_lib("../data/bam-readcount/D19.hhv6b.se.bam.br.txt")
-d14 <- process_lib("../data/bam-readcount/D14.hhv6b.se.bam.br.txt")
-infusion <- process_lib("../data/bam-readcount/D0infusion.hhv6b.se.bam.br.txt")
-pub1 <- process_lib("../data/bam-readcount/SRR2454080.hhv6b.se.bam.br.txt")
-pub2 <- process_lib("../data/bam-readcount/SRR8646162.hhv6b.paired.bam.br.txt")
+mdf10 <- merge(all_possible_muts("../data/bam-readcount/SRR2454080.hhv6b.se.bam.br.txt"),
+               all_possible_muts("../data/bam-readcount/SRR8646162.hhv6b.paired.bam.br.txt"),
+               by = "var", all = TRUE) %>%
+  filter(TOTAL.x >= 10 & TOTAL.y >=10 )
 
-muts <- infusion %>% filter(AF > 90 & TOTAL >= 2) %>%
-  filter(max_allele != REF) %>%
-  pull(BP)
-d19 %>% filter(BP %in% muts)  #%>% filter(!mutation)
-d14 %>% filter(BP %in% muts)  #%>% filter(!mutation)
+# This has the scRNA-seq coverage
+well_covered <- fread("../data/bam-readcount/D19.hhv6b.paired.bam.br.txt") %>% filter(TOTAL > 100) %>% pull(BP)
+mdf10 %>% filter(af.x > 0.95 & af.y > 0.95 & REF.y != variable.y) %>% filter(BP.x %in% well_covered)
+mdf10 %>% filter(af.x > 0.95 & af.y < 0.05 & REF.y != variable.y) %>% filter(BP.x %in% well_covered)
+mdf10 %>% filter(af.x < 0.05 & af.y > 0.95 & REF.y != variable.y) %>% filter(BP.x %in% well_covered)
 
-pub1 %>% filter(BP %in% muts)%>% filter(!mutation)
-pub2 %>% filter(BP %in% muts) %>% filter(!mutation) %>%
-  data.frame()
+####
+mdf10 <- merge(all_possible_muts("../data/bam-readcount/D19.hhv6b.se.bam.br.txt"),
+               all_possible_muts("../data/bam-readcount/D0infusion.hhv6b.se.bam.br.txt"),
+               by = "var", all = TRUE) %>%
+  filter(TOTAL.x >= 5 & TOTAL.y >= 5)
+mdf10 %>% filter(af.x > 0.95 & af.y > 0.95 & REF.y != variable.y)
+mdf10 %>% filter(af.x > 0.95 & af.y < 0.05 & REF.y != variable.y) 
+mdf10 %>% filter(af.x < 0.05 & af.y > 0.95 & REF.y != variable.y)
+
+

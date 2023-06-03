@@ -8,7 +8,7 @@ gene_vec <- grch38$symbol; names(gene_vec) <- grch38$ensgene
 process_channel <- function(channel){
 
   # Import kallisto dat
-  car <- fread(paste0("../data/new-data/features/",channel,"_CAR.quantFinal.txt")) %>%
+  car <- fread(paste0("../data/new-data/features//",channel,"_CAR.quantFinal.txt")) %>%
     mutate(bc = paste0(V1, "-1"))
   hhv6 <- fread(paste0("../data/new-data/features/",channel,"_HHV6b.quantFinal.txt")) %>%
     filter(!(V3 %in% c(6, 120))) %>%
@@ -50,6 +50,12 @@ process_channel <- function(channel){
 }
 
 df <- process_channel(channel = "BBB7")
+
+process_channel(channel = "BBBleuk")
+process_channel(channel = "BBB7")
+process_channel(channel = "BBB14")
+process_channel(channel = "BBB21")
+
 filt_df <- df %>% filter(nGExpUMIs > 800) %>% arrange(desc(n_hhv6))
 
 write.table(filt_df, file = "../output/HHV6-positive-cells-reseq.tsv", 

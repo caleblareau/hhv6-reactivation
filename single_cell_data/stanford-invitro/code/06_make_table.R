@@ -5,6 +5,8 @@ library(BuenColors)
 source("00_functions.R")
 library(Matrix)
 
+dim(Read10X_h5("../data/gexp/ALLO_Sample61-Day7_rna_filtered_feature_bc_matrix.h5"))
+    
 make_superexpressor_plot <- function(donor){
   
   # Import data
