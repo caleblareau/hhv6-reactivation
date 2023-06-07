@@ -24,6 +24,18 @@ cowplot::ggsave2(p1, file = "foscarnet_qpcr_hhv6.pdf", width = 2, height = 2)
 ctr <- qpcr_df$V2[1:3]
 mm25 <- qpcr_df$V2[4:6]
 mm5 <- qpcr_df$V2[7:8]
-
+mm1 <- c(0,0) # nd
 t.test(ctr, mm25)
 t.test(ctr, mm5)
+
+library(lme4)
+
+allqpcrdata <- data.frame(
+  amount = c(ctr, mm1, mm25, mm5),
+  treatment = c(0,0,0,1,1,1,1,1,1,1),
+  what = c("c", "c", "c", "1", "1", "25", "25","25","5", "5")
+)
+
+lm(amount ~ treatment + what, data=allqpcrdata) %>% summary()
+
+

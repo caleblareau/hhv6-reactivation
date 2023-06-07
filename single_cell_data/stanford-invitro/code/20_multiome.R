@@ -1,11 +1,11 @@
 library(data.table)
 library(dplyr)
 library(viridis)
-
+library(Seurat)
 library(BuenColors)
 source("00a_multiome_helper_functions.R")
 source("00_functions.R")
-
+x <- Read10X_h5("../../../../hhv6-large-data-files/invitro_cultures/ALLO98_ARC_v2.feature_mat.h5")
 donorz <- "D98"
 bcs <- fread(paste0("../data/multiome/98ARC_per_barcode_metrics.csv.gz")) %>%
   filter(is_cell == 1) %>%

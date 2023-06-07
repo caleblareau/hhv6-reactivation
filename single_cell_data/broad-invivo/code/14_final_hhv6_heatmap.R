@@ -113,6 +113,8 @@ ha <- HeatmapAnnotation(
   show_legend = FALSE, annotation_label = ""
 )
 
+hhv6_mat[adf_go$gene,supp_table_df$barcode]+1
+
 hm <- Heatmap(t(log1p(hhv6_mat[adf_go$gene,supp_table_df$barcode]+1)), cluster_rows = FALSE, cluster_columns = FALSE,
         col = jdb_palette("solar_rojos"), top_annotation =  ha, 
         column_names_gp = grid::gpar(fontsize = 4),

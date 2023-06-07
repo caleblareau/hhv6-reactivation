@@ -60,6 +60,13 @@ P1 <- ggplot(mdf %>% filter(called_cell & assignment %in% c("0", "1")), aes(x =a
 P1
 cowplot::ggsave2(P1, file = "../plots/hhv6umis.pdf", width = 1.1, height = 1.5)
 
+mdf %>% filter(called_cell & assignment %in% c("0", "1")) %>%
+  filter(HHV6cp10k > 0) %>%
+  group_by(assignment) %>% 
+  summarize(nHigh = sum(HHV6cp10k > 20), max(HHV6cp10k))
+
+
+### Other analyses
 ggplot(mdf %>% filter(called_cell & assignment %in% c("0", "1")), aes(x = as.character(abs(as.numeric(assignment)-1)), y = GZMBcp10k)) + 
   geom_quasirandom(size = 0.5)  + pretty_plot(fontsize = 7) + L_border() + labs(x = "", y = "GZMB UMIs per 10k")
 
