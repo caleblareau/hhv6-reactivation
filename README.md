@@ -6,7 +6,7 @@ Lareau et al. 2023 "Latent human herpesvirus 6 is reactivated in chimeric antige
 ## Reproducibility
 
 ### Raw sequencing data
-Our .fastq is made freely available on the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE210063).
+Our .fastq files are made available on the [Gene Expression Omnibus](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE210063).
 
 ### Figure 1
 - [This repository](https://github.com/caleblareau/serratus-reactivation-screen) contains files to reproduce Serratus screening analyses for all viruses (via ViralZone) known to infect humans (see panels b,c). Note: due to the large number of `.soft` files annotating the GSM samples, it made sense to make this a separate repository.
@@ -55,6 +55,6 @@ tree -L 2
     └── stjude-invivo # Folder for Fig 3 / cohort 3
 ```
 
-*Contact:* Raise a GitHub issue or email [Caleb](mailto:clareau@stanford.edu).
+*Contact:* Raise a GitHub issue or email [Caleb](mailto:lareauc@mskcc.org) or [Ansu](satpathy@stanford.edu).
 
 <br>
