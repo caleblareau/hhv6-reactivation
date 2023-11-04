@@ -1,5 +1,7 @@
 # HHV6 Reactivation
-Repository for reproducing analyses related to HHV-6 reactivation in T cells manuscript
+Repository for reproducing analyses related to HHV-6 reactivation in T cells manuscript:
+
+Lareau et al. 2023 "Latent human herpesvirus 6 is reactivated in CAR T cells" _Nature_. DOI: 10.1038/s41586-023-06704-2
 
 ## Reproducibility
 

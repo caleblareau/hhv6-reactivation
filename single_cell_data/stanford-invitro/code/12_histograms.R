@@ -31,14 +31,15 @@ make_density_plot <- function(donor){
   pq <- ggplot(so_filt@meta.data,aes(x = so_filt$HHV6 + 1)) +
     geom_histogram(color = "black", fill = "lightgrey", bins = 20) + 
     pretty_plot(fontsize = 7) + L_border() +
-    scale_x_log10() + scale_y_log10(expand = c(0,0)) + 
-    labs(x = "HHV6 expression (log10 scaled)", y = "Number of cells")
-  cowplot::ggsave2(pq, file = paste0("../plots/histogram_", donor, ".pdf"), width = 2.8, height = 1.4)
+    scale_x_log10() + scale_y_log10(expand = c(0,0), limits = c(1,12500)) + 
+    labs(x = "HHV6 expression (log10 scaled)", y = "Number of cells") 
+  cowplot::ggsave2(pq, file = paste0("../plots/histogram_", donor, ".pdf"), width = 1.4, height = 1.4)
   # Now plot the distribution
   print(table(so_filt$HHV6 > 10))
   print(sum(so_filt$HHV6 [so_filt$HHV6 > 10])/sum(so_filt$HHV6 ))
   
 }
+lapply(c("Sample34", "Sample34-Day7"), make_density_plot)
 
 lapply(c("Sample61-Day7", "Sample34-Day5", "Sample34-Day7", "GMP6-Day6", "D5720-Day15"), make_density_plot)
 lapply(c("Sample34", "Sample38", "Sample97", "Sample98"), make_density_plot)
